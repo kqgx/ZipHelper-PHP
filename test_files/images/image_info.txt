@@ -1,0 +1,23 @@
+图片信息
+
+此文件夹通常用于存放项目的图片资源。在实际项目中，您可能会在这里放置：
+
+1. 网站/应用的LOGO
+2. 界面UI元素
+3. 用户上传的图片
+4. 产品图片
+
+支持的图片格式：
+- PNG (推荐用于需要透明背景的图片)
+- JPG/JPEG (适合照片和复杂图像)
+- GIF (支持简单动画)
+- SVG (矢量图形，可缩放)
+- WebP (新一代图片格式，提供更好的压缩率)
+
+使用ZipHelper压缩整个图片目录的示例代码：
+
+$zipHelper = new ZipHelper('images.zip');
+$zipHelper->addDirectory('test_files/images');
+
+// 或者使用自定义路径
+$zipHelper->addDirectory('test_files/images', 'project_images'); 

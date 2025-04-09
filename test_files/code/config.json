@@ -1,0 +1,28 @@
+{
+  "appName": "测试应用",
+  "version": "1.0.0",
+  "settings": {
+    "theme": "dark",
+    "language": "zh-CN",
+    "notifications": true,
+    "autoUpdate": true
+  },
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "app_user",
+    "password": "********",
+    "name": "app_db"
+  },
+  "features": [
+    "用户管理",
+    "文件上传",
+    "报表生成",
+    "数据导出"
+  ],
+  "paths": {
+    "uploads": "./uploads",
+    "temp": "./temp",
+    "logs": "./logs"
+  }
+} 
