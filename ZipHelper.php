@@ -27,7 +27,8 @@ class ZipHelper
      * 构造函数
      * 
      * @param string $zipName 压缩包文件名
-     * @param string|null $tempPath 临时目录路径
+     * @param string|null $tempPath 临时目录路径，如果不存在会自动创建
+     * @throws \RuntimeException 如果创建临时目录失败或ZipArchive扩展未启用
      */
     public function __construct($zipName = 'archive.zip', $tempPath = null)
     {
@@ -39,9 +40,17 @@ class ZipHelper
         $this->zipName = $this->sanitizeFilename($zipName);
         $this->tempPath = $tempPath ?: sys_get_temp_dir();
 
-        // 确保临时目录存在且可写
-        if (!is_dir($this->tempPath) || !is_writable($this->tempPath)) {
-            throw new \RuntimeException("临时目录不存在或不可写: {$this->tempPath}");
+        // 确保临时目录存在
+        if (!is_dir($this->tempPath)) {
+            // 尝试创建临时目录
+            if (!@mkdir($this->tempPath, 0755, true)) {
+                throw new \RuntimeException("临时目录不存在，且无法创建: {$this->tempPath}");
+            }
+        }
+
+        // 确保临时目录可写
+        if (!is_writable($this->tempPath)) {
+            throw new \RuntimeException("临时目录不可写: {$this->tempPath}");
         }
     }
 
@@ -261,18 +270,23 @@ class ZipHelper
     /**
      * 保存压缩包到指定路径
      * 
-     * @param string $savePath 保存路径
+     * @param string $savePath 保存路径，如果不存在会自动创建
      * @return string 保存的文件路径
      * @throws \RuntimeException 如果保存压缩包失败
      */
     public function saveTo($savePath)
     {
+        // 确保保存路径存在
         if (!is_dir($savePath)) {
-            throw new \InvalidArgumentException("保存路径不存在: {$savePath}");
+            // 尝试创建保存目录
+            if (!@mkdir($savePath, 0755, true)) {
+                throw new \RuntimeException("保存路径不存在，且无法创建: {$savePath}");
+            }
         }
 
+        // 确保保存路径可写
         if (!is_writable($savePath)) {
-            throw new \InvalidArgumentException("保存路径不可写: {$savePath}");
+            throw new \RuntimeException("保存路径不可写: {$savePath}");
         }
 
         $zipPath = $this->create();
